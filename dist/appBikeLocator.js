@@ -346,6 +346,7 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
                 that.velibMarkers[value.number] = marker;
 
                 google.maps.event.addListener(that.velibMarkers[value.number], 'click', function(e) {
+                    that.closeDetailStation();
                     that.infowindow.setContent('Bike station: '  + value.name);
                     that.infowindow.open(that.map, this);
                     that.$el.trigger('showDetail', [value.number, value.contract_name]);
@@ -355,6 +356,7 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
                 });
                 google.maps.event.addListener(that.velibMarkers[value.number], 'clickDetail', function(e) {
                     //if(map.getZoom() >= mc.getMaxZoom()) {
+                    that.closeDetailStation();
                     myLatlng = new google.maps.LatLng(value.position.lat,value.position.lng);
                     that.infowindow.setContent('Bike station: '  + value.name);
                     that.infowindow.setPosition(myLatlng);
