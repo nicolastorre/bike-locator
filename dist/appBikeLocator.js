@@ -435,7 +435,8 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
             this.$el.removeClass('loading');
         }
     });;
-
-var app = new velibSearchController();
+$( document ).ready(function() {
+    var app = new velibSearchController();
+});
 
 })(jQuery);
