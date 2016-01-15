@@ -1,0 +1,19 @@
+<div id="stations-list-panel" class="panel panel-default stations-list-panel">
+    <div class="panel-heading">
+        <h3>{{ stations.length }} bike stations</h3>
+    </div>
+    <div class="panel-body stations-list">
+        <ul id="stations-list">
+            {{#each stations}}
+            <li data-station="{{this.number}}" data-contract="{{this.contract_name}}" class="station">
+                <strong>{{this.name}}</strong>
+						<span>
+							{{this.address}} <br/> {{this.postcode}} {{this.city}} <br/>
+							<!--<a href='#' class='directions'>Get directions</a>-->
+						</span>
+                <hr/>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>

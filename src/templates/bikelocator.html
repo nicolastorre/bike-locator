@@ -1,0 +1,55 @@
+<div id="search-box" class="container">
+    <div id="form-locator" class="container well">
+        <form>
+            <div class="form-group row">
+                <div class="col-sm-1">
+                    <label for="search-location" class="form-control-label">Location</label>
+                </div>
+                <div class="col-sm-2">
+                    <input type="text" id="search-location" name="location" class="form-control" >
+                </div>
+                <div class="col-sm-2">
+                    <select class="form-control" id="distance" name="distance">
+                        <option value="none">None</option>
+                        <option value="5">5 km</option>
+                        <option value="10">10 km</option>
+                        <option value="15">15 km</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select class="form-control" id="contract" name="contract">
+                        <option value="all" selected="selected">All</option>
+                        {{#each contracts}}
+                        <option value="{{this.name}}">{{this.name}}</option>
+                        {{/each}}
+
+                    </select>
+                </div>
+                <button type="button" id="search-button" class="col-sm-2 btn btn-primary">Search</button>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label for="min-available-bike" class="form-control-label">Min available bike</label>
+                </div>
+                <div class="col-sm-2">
+                    <div id="min-available-bike" class="slider"></div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <label for="min-free-stand" class="form-control-label">Min free stand</label>
+                </div>
+                <div class="col-sm-2">
+                    <div id="min-free-stand" class="slider"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div id="list-velib" class="col-sm-3">
+        </div>
+        <div id="map-canvas" class="col-sm-9"></div>
+    </div>
+</div>
