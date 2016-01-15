@@ -63,6 +63,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('default', ['handlebars','concat','uglify']);
-// grunt.registerTask('dev', ['watch']);
+    // grunt.registerTask('dev', ['watch']);
 
 };

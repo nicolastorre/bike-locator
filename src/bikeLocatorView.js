@@ -110,7 +110,7 @@
             var that = this;
             this.$list = $('#list-velib');
 
-            that.$list.empty();
+            this.$list.empty();
 
             var context = {stations: stations};
             this.getTemplate('stationlist',that.$list, context);
