@@ -14,6 +14,17 @@
 
         },
 
+        initDeferredSearch: function() {
+            var that = this;1
+
+            this.geocodingEvent = $.Deferred();
+            this.listStationsEvent = $.Deferred();
+            $.when(this.geocodingEvent, this.listStationsEvent).done(function(){
+
+                that.model.sortByDistanceBikeAndStand();
+            });
+        },
+
         event: function (data) { // séparer event model et event view
             var that = this;
 
@@ -26,25 +37,25 @@
                 that.model.request();
             });
 
-            var geocodingEvent = $.Deferred();
-            var listStationsEvent = $.Deferred();
+            this.initDeferredSearch();
 
             that.$el.on('geocoded', function(e) {
-                geocodingEvent.resolve();
+                that.geocodingEvent.resolve();
             });
 
             that.$el.on('requested', function(e) {
-                listStationsEvent.resolve();
+                that.listStationsEvent.resolve();
             });
 
-            $.when(listStationsEvent).done(function(){
-
+            that.$el.on('showListMap', function(e) {
                 if(that.model.stations.length == 0) {
                     that.view.emptyResultView();
                 } else {
                     that.view.listView(that.model.stations);
                     that.view.mapView(that.model.stations);
                 }
+                that.initDeferredSearch();
+
             });
 
             that.$el.on("click", '.station', function(e){

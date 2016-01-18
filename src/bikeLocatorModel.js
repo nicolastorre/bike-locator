@@ -35,15 +35,19 @@ var velibDataRequest = Stapes.subclass({
 
         var geocoder = new google.maps.Geocoder();
         var address = $('#search-location').val();
-        geocoder.geocode({'address': address}, function(results, status) {
-            if (status === google.maps.GeocoderStatus.OK) {
-                that.location = results[0].geometry.location;
-                console.log("Position: lat: " + that.location.lat() + "lng: " + that.location.lat());
-            } else {
-                alert('Geocode was not successful for the following reason: ' + status);
-            }
+        if(address.length > 0) {
+            geocoder.geocode({'address': address}, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    that.location = results[0].geometry.location;
+                    console.log("Position: lat: " + that.location.lat() + "lng: " + that.location.lat());
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+                that.$el.trigger('geocoded');
+            });
+        } else {
             that.$el.trigger('geocoded');
-        });
+        }
     },
 
     request: function (data) {
@@ -60,7 +64,6 @@ var velibDataRequest = Stapes.subclass({
                 data: parameters,
                 success: function(data) {
                     that.stations = data;
-                    that.sortByBikeAndStand();
                     that.$el.trigger('requested');
                     that.ajaxStatus = false;
                     that.removeSpinner();
@@ -133,20 +136,54 @@ var velibDataRequest = Stapes.subclass({
         }
     },
 
-    sortByBikeAndStand: function() {
+    /**
+     * Conversion angle degré -> radian
+     */
+    toRadian: function(v) {
+        return v * (Math.PI / 180);
+    },
+
+    /**
+     * Calcul la différence entre deux angles en degré
+     */
+    diffRadian: function(v1, v2) {
+        return this.toRadian(v2) - this.toRadian(v1);
+    },
+
+    /**
+     * Calculate distance between two points with lat and lng coordinates
+     */
+    distance: function(lat1, lng1, lat2, lng2) {
+        var earthRadiusInKilometers = 6367.0;
+        return earthRadiusInKilometers * 2 * Math.asin( Math.min(1, Math.sqrt( ( Math.pow(Math.sin((this.diffRadian(lat1, lat2)) / 2.0), 2.0) + Math.cos(this.toRadian(lat1)) * Math.cos(this.toRadian(lat2)) * Math.pow(Math.sin((this.diffRadian(lng1, lng2)) / 2.0), 2.0) ) ) ) );
+    },
+
+    sortByDistanceBikeAndStand: function() { // ajouter by distance et trigger view
         var that = this;
 
+        var distance = $('#distance').val();
         var min_available_bike = $('#min-available-bike').slider("value");
         var min_free_stand = $('#min-free-stand').slider("value");
         var new_stations = [];
-        $.each(that.stations, function(index, value) {
-            if(value.available_bikes >= min_available_bike && value.available_bike_stands >= min_free_stand ) {
-                new_stations.push(that.stations[index]);
-            }
+        if("none" != distance && null != that.location) {
+            $.each(that.stations, function (index, value) {
+                if (that.distance(value.position.lat, value.position.lng, that.location.lat(), that.location.lng()) <= distance && value.available_bikes >= min_available_bike && value.available_bike_stands >= min_free_stand) {
+                    new_stations.push(that.stations[index]);
+                }
 
-        });
+            });
+        } else {
+            $.each(that.stations, function (index, value) {
+                if (value.available_bikes >= min_available_bike && value.available_bike_stands >= min_free_stand) {
+                    new_stations.push(that.stations[index]);
+                }
+
+            });
+        }
 
         that.stations = new_stations;
+
+        that.$el.trigger('showListMap');
 
     },
 
