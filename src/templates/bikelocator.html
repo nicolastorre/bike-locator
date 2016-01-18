@@ -2,13 +2,12 @@
     <div id="form-locator" class="container well">
         <form>
             <div class="form-group row">
-                <div class="col-sm-1">
-                    <label for="search-location" class="form-control-label">Location</label>
-                </div>
                 <div class="col-sm-2">
+                    <label for="search-location" class="form-control-label">Location</label>
                     <input type="text" id="search-location" name="location" class="form-control" >
                 </div>
                 <div class="col-sm-2">
+                    <label for="distance" class="form-control-label">Distance</label>
                     <select class="form-control" id="distance" name="distance">
                         <option value="none">None</option>
                         <option value="5">5 km</option>
@@ -17,6 +16,7 @@
                     </select>
                 </div>
                 <div class="col-sm-2">
+                    <label for="contract" class="form-control-label">City</label>
                     <select class="form-control" id="contract" name="contract">
                         <option value="all" selected="selected">All</option>
                         {{#each contracts}}
