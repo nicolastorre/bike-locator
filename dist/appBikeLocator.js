@@ -488,8 +488,8 @@ var velibDataRequest = Stapes.subclass({
             }
 
             if($('#map-canvas').length) {
-                console.log('empty');
                 $('#map-canvas').empty();
+                $('#map-canvas').css('background-color','rgb(255,255,255)');
             }
             var context = {};
             this.getTemplate('emptyresult',that.$list, context);

@@ -136,6 +136,7 @@
 
             if($('#map-canvas').length) {
                 $('#map-canvas').empty();
+                $('#map-canvas').css('background-color','rgb(255,255,255)');
             }
             var context = {};
             this.getTemplate('emptyresult',that.$list, context);
