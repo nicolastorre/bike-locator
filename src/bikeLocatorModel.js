@@ -38,10 +38,10 @@ var velibDataRequest = Stapes.subclass({
         geocoder.geocode({'address': address}, function(results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
                 that.location = results[0].geometry.location;
-                that.$el.trigger('geocoded');
             } else {
                 alert('Geocode was not successful for the following reason: ' + status);
             }
+            that.$el.trigger('geocoded');
         });
     },
 

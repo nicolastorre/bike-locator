@@ -14,7 +14,7 @@
 
         },
 
-        event: function (data) {
+        event: function (data) { // séparer event model et event view
             var that = this;
 
             that.$el.on("requestedContracts", function(){
