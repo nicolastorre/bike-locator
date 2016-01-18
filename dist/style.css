@@ -74,3 +74,9 @@ ul#stations-list
 {
     margin-top: 10px;
 }
+.slider-value
+{
+    padding: 1px;
+    width: 25px;
+    height: 25px;
+}
