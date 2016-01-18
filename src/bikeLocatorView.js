@@ -27,13 +27,27 @@
             var context = {contracts: contracts};
             this.getTemplate('bikelocator',that.$el, context);
 
-            $('.slider').slider(
-                {
-                    value: 0,
-                    min: 0,
-                    max: 50,
-                    step: 5
-                });
+            $('#min-available-bike').slider(
+            {
+                value: 0,
+                min: 0,
+                max: 50,
+                step: 5,
+                slide: function( e, ui ) {
+                    $('#min-available-bike-value').val(ui.value);
+                }
+            });
+
+            $('#min-free-stand').slider(
+            {
+                value: 0,
+                min: 0,
+                max: 50,
+                step: 5,
+                slide: function( e, ui ) {
+                    $('#min-free-stand-value').val(ui.value);
+                }
+            });
 
             var autocomplete = new google.maps.places.Autocomplete(
                 (document.getElementById('search-location')), {types: ['geocode']});

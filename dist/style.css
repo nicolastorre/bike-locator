@@ -68,5 +68,9 @@ ul#stations-list
 }
 #search-button
 {
-    margin-top: 24px;
+    margin-top: 10px;
+}
+.slider
+{
+    margin-top: 10px;
 }
