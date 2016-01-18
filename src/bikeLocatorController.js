@@ -22,10 +22,24 @@
             });
 
             that.$el.on("click", '#search-button', function(){
+                that.model.geocode();
                 that.model.request();
             });
 
-            that.$el.on("requested", function(){
+            var geocodingEvent = $.Deferred();
+            var listStationsEvent = $.Deferred();
+
+            that.$el.on('geocoded', function(e) {
+                geocodingEvent.resolve();
+            });
+
+            that.$el.on('requested', function(e) {
+                listStationsEvent.resolve();
+            });
+
+            $.when(listStationsEvent).done(function(){
+
+                console.log(that.model.location.lat());
                 if(that.model.stations.length == 0) {
                     that.view.emptyResultView();
                 } else {

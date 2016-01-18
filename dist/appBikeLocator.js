@@ -88,10 +88,33 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
             });
 
             that.$el.on("click", '#search-button', function(){
+                that.model.geocode();
                 that.model.request();
             });
 
-            that.$el.on("requested", function(){
+            /*that.$el.on("requested", function(){
+                if(that.model.stations.length == 0) {
+                    that.view.emptyResultView();
+                } else {
+                    that.view.listView(that.model.stations);
+                    that.view.mapView(that.model.stations);
+                }
+            });*/
+
+            var geocodingEvent = $.Deferred();
+            var listStationsEvent = $.Deferred();
+
+            that.$el.on('geocoded', function(e) {
+                geocodingEvent.resolve();
+            });
+
+            that.$el.on('requested', function(e) {
+                listStationsEvent.resolve();
+            });
+
+            $.when(listStationsEvent).done(function(){
+
+                console.log(that.model.location.lat());
                 if(that.model.stations.length == 0) {
                     that.view.emptyResultView();
                 } else {
@@ -142,7 +165,7 @@ var velibDataRequest = Stapes.subclass({
         this.contractURL = "https://api.jcdecaux.com/vls/v1/contracts";
         this.stationURL = "https://api.jcdecaux.com/vls/v1/stations/";
 
-        this.geocode = null;
+        this.location = null;
 
         this.apiKey = "15c9f9a03c7c9a67d4287fd82e04bf6d775719ad";
 
@@ -171,7 +194,7 @@ var velibDataRequest = Stapes.subclass({
         var address = $('#search-location').val();
         geocoder.geocode({'address': address}, function(results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
-                that.geocode = results[0].geometry.location;
+                that.location = results[0].geometry.location;
                 that.$el.trigger('geocoded');
             } else {
                 alert('Geocode was not successful for the following reason: ' + status);
