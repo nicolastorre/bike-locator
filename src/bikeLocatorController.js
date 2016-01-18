@@ -39,7 +39,6 @@
 
             $.when(listStationsEvent).done(function(){
 
-                console.log(that.model.location.lat());
                 if(that.model.stations.length == 0) {
                     that.view.emptyResultView();
                 } else {

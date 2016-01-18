@@ -38,6 +38,7 @@ var velibDataRequest = Stapes.subclass({
         geocoder.geocode({'address': address}, function(results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
                 that.location = results[0].geometry.location;
+                console.log("Position: lat: " + that.location.lat() + "lng: " + that.location.lat());
             } else {
                 alert('Geocode was not successful for the following reason: ' + status);
             }
