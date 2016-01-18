@@ -66,3 +66,7 @@ ul#stations-list
     float: right;
     width: 24px;
 }
+#search-button
+{
+    margin-top: 24px;
+}
