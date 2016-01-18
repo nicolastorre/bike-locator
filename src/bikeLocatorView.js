@@ -35,6 +35,11 @@
                     step: 5
                 });
 
+            var autocomplete = new google.maps.places.Autocomplete(
+                (document.getElementById('search-location')), {types: ['geocode']});
+
+            google.maps.event.addListener(autocomplete, 'place_changed', function() {});
+
         },
 
         mapView: function(stations) {
