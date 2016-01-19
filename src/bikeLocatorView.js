@@ -1,5 +1,7 @@
-
-    var velibDataResult = Stapes.subclass({
+    /**
+     * bike locator view
+     */
+    var bikeLocatorView = Stapes.subclass({
         constructor: function () {
             var that = this;
 
@@ -10,7 +12,12 @@
 
         },
 
-        // faire une méthode générique pour l'ajout des templates
+        /**
+         * add template
+         *
+         * @param templateSRC
+         * @param element
+         */
         getTemplate: function(templateSRC, element) {
             if (arguments.length == 3) {
                 var data = arguments[2];
@@ -21,12 +28,16 @@
             $(element).append(out);
         },
 
+        /**
+         * initialisation du template bikelocator
+         */
         init: function() {
             var that = this;
 
             var context = {};
             this.getTemplate('bikelocator',that.$el, context);
 
+            // range slider
             var min = 0;
             var max = 100;
             $('#min-available-bike').slider(
@@ -59,6 +70,7 @@
             $('#min-free-stand-value').val(min);
             $('#max-free-stand-value').val(max);
 
+            // autocomplete location input
             var autocomplete = new google.maps.places.Autocomplete(
                 (document.getElementById('search-location')), {types: ['geocode']});
 
@@ -66,12 +78,22 @@
 
         },
 
+        /**
+         * init the contract options
+         *
+         * @param contracts
+         */
         initContractOptions: function(contracts) {
             this.$contractOptions = $('#contract');
             var context = {contracts: contracts};
             this.getTemplate('contractoptions',this.$contractOptions, context);
         },
 
+        /**
+         * display the map
+         *
+         * @param stations
+         */
         mapView: function(stations) {
             var that = this;
             var myLatlng;
@@ -141,6 +163,11 @@
 
         },
 
+        /**
+         * display the station list
+         *
+         * @param stations
+         */
         listView: function(stations) {
             var that = this;
             this.$list = $('#list-velib');
@@ -151,6 +178,11 @@
             this.getTemplate('stationlist',that.$list, context);
         },
 
+        /**
+         * display the current station details
+         *
+         * @param station
+         */
         detailView: function(station) {
             var that = this;
             this.$stationsListPanel = $('#stations-list-panel');
@@ -161,6 +193,9 @@
 
         },
 
+        /**
+         * display no results
+         */
         emptyResultView: function() {
             var that = this;
             this.$list = $('#list-velib');
@@ -177,10 +212,16 @@
             this.getTemplate('emptyresult',that.$list, context);
         },
 
+        /**
+         * close infowindow
+         */
         closeInfoWindow: function() {
             this.infowindow.close();
         },
 
+        /**
+         * close current station details
+         */
         closeDetailStation: function() {
             var that = this;
             this.$stationsListPanel = $('#stations-list-panel');
@@ -190,9 +231,16 @@
             this.$stationsListPanel.show();
         },
 
+        /**
+         * trigger start spinner
+         */
         renderSpinner: function() {
             this.$el.trigger('startSpinner');
         },
+
+        /**
+         * trigger stop spinner
+         */
         removeSpinner: function() {
             this.$el.trigger('stopSpinner');
         }

@@ -2,20 +2,20 @@
     'use strict';
 
     /**
-     * main controller du widget bike locator
+     * main controller of bike locator widget
      */
-    var velibSearchController = Stapes.subclass({
+    var bikeLocatorController = Stapes.subclass({
         constructor: function () {
 
             // main selector
             this.$el = $('#locator');
 
             // init the model
-            this.model = new velibDataRequest();
+            this.model = new bikeLocatorModel();
             this.model.requestContracts();
 
             // init the view
-            this.view = new velibDataResult();
+            this.view = new bikeLocatorView();
             this.view.init();
 
             // init the spinner

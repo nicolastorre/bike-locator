@@ -1,6 +1,6 @@
 
 $( document ).ready(function() {
-    var app = new velibSearchController();
+    var app = new bikeLocatorController();
 });
 
 })(jQuery);
