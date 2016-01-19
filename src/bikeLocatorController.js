@@ -51,7 +51,7 @@
              * click on search button
              * execute geocoding and request of station list
              */
-            that.$el.on("click", '#search-button', function () {
+            this.$el.on("click", '#search-button', function () {
                 that.model.geocode();
                 that.model.request();
             });
@@ -65,14 +65,14 @@
             /**
              * geocoding DONE
              */
-            that.$el.on('geocoded', function (e) {
+            this.$el.on('geocoded', function (e) {
                 that.geocodingEvent.resolve();
             });
 
             /**
              * request of station list DONE
              */
-            that.$el.on('requested', function (e) {
+            this.$el.on('requested', function (e) {
                 that.listStationsEvent.resolve();
             });
 
@@ -80,7 +80,7 @@
              * click on station
              * execute request of the current clicked station
              */
-            that.$el.on("click", '.station', function (e) {
+            this.$el.on("click", '.station', function (e) {
                 var $target = $(e.target);
                 var id = $target.closest('.station').data('station');
                 var contract = $target.closest('.station').data('contract');
@@ -93,7 +93,7 @@
              * click on station marker map
              * execute request of the current clicked station
              */
-            that.$el.on("showDetail", function (e, id, contract) {
+            this.$el.on("showDetail", function (e, id, contract) {
                 var $target = $(e.target);
                 that.model.requestCurrentStation(id, contract);
 
@@ -110,14 +110,14 @@
             /**
              * init contracts select view
              */
-            that.$el.on("requestedContracts", function(){
+            this.$el.on("requestedContracts", function(){
                 that.view.initTemplate(that.model.contracts);
             });
 
             /**
              * show station list and map
              */
-            that.$el.on('showListMap', function(e) {
+            this.$el.on('showListMap', function(e) {
                 if(that.model.stations.length == 0) {
                     that.view.emptyResultView();
                 } else {
@@ -131,14 +131,14 @@
             /**
              * show the current clicked station
              */
-            that.$el.on("requestedCurrentStation", function(){
+            this.$el.on("requestedCurrentStation", function(){
                 that.view.detailView(that.model.currentStation);
             });
 
             /**
              * close the current station details and infowindow after clicking on infowindow close button
              */
-            that.$el.on("click", '.btn-close', function(e){
+            this.$el.on("click", '.btn-close', function(e){
                 that.view.closeInfoWindow();
                 that.view.closeDetailStation();
             });
@@ -146,7 +146,7 @@
             /**
              * close the current station details and infowindow after clicking on detail close button
              */
-            that.$el.on("listView", function(){
+            this.$el.on("listView", function(){
                 that.view.closeInfoWindow();
                 that.view.closeDetailStation();
             });
@@ -154,14 +154,14 @@
             /**
              * start the spinner
              */
-            that.$el.on("startSpinner", function() {
+            this.$el.on("startSpinner", function() {
                 that.spinner.spin(document.getElementById('locator'));
             });
 
             /**
              * stop the spinner
              */
-            that.$el.on("stopSpinner", function() {
+            this.$el.on("stopSpinner", function() {
                 that.spinner.stop();
             });
 
