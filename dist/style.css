@@ -19,7 +19,7 @@ hr
 }*/
 .stations-list
 {
-    max-height: 425px;
+    height: 425px;
     overflow: scroll;
 }
 .station
