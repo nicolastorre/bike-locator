@@ -54,7 +54,7 @@
              */
             this.$el.on("click", '#search-button', function () {
                 that.model.geocode();
-                that.model.request();
+                that.model.requestStationList();
             });
 
             /**

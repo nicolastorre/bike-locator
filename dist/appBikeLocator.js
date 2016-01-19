@@ -122,7 +122,7 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
              */
             this.$el.on("click", '#search-button', function () {
                 that.model.geocode();
-                that.model.request();
+                that.model.requestStationList();
             });
 
             /**
@@ -266,83 +266,43 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
             this.spinner = new Spinner(opts);
         },
 
-    });;
+    });;/**
+ * bikelocator model
+ */
 var velibDataRequest = Stapes.subclass({
     constructor: function () {
 
+        // main selector
         this.$el = $('#locator');
 
+        // JC Decaux API KEY
+        this.apiKey = "15c9f9a03c7c9a67d4287fd82e04bf6d775719ad";
+
+        // API URL
         this.velibURL = "https://api.jcdecaux.com/vls/v1/stations";
         this.contractURL = "https://api.jcdecaux.com/vls/v1/contracts";
         this.stationURL = "https://api.jcdecaux.com/vls/v1/stations/";
 
-        this.location = null;
-
-        this.apiKey = "15c9f9a03c7c9a67d4287fd82e04bf6d775719ad";
-
-        this.stations = {};
-        this.currentStation = null;
+        // contract options
         this.contracts = null;
 
+        // geocoded location
+        this.location = null;
+
+        // station list
+        this.stations = {};
+
+        // current station
+        this.currentStation = null;
+
+        // ajax flag
         this.ajaxStatus = false;
 
     },
 
-    query: function() {
-        var parameters = {};
-        if($('#contract').val() != 'all') {
-            parameters.contract = $('#contract').val()
-        }
-        parameters.apiKey = this.apiKey;
-
-        return parameters;
-    },
-
-    geocode: function () {
-        var that = this;
-
-        var geocoder = new google.maps.Geocoder();
-        var address = $('#search-location').val();
-        if(address.length > 0) {
-            geocoder.geocode({'address': address}, function (results, status) {
-                if (status === google.maps.GeocoderStatus.OK) {
-                    that.location = results[0].geometry.location;
-                    console.log("Position: lat: " + that.location.lat() + "lng: " + that.location.lat());
-                } else {
-                    alert('Geocode was not successful for the following reason: ' + status);
-                }
-                that.$el.trigger('geocoded');
-            });
-        } else {
-            that.$el.trigger('geocoded');
-        }
-    },
-
-    request: function (data) {
-        var parameters;
-        var that = this;
-
-        if(!this.ajaxStatus) {
-            this.ajaxStatus = true;
-            this.renderSpinner();
-
-            parameters = this.query();
-            $.ajax({
-                url: that.velibURL,
-                data: parameters,
-                success: function(data) {
-                    that.stations = data;
-                    that.$el.trigger('requested');
-                    that.ajaxStatus = false;
-                    that.removeSpinner();
-                },
-                error: function(xhr, ajaxOptions, thrownError) {
-                    alert('Erreur API JC Decaux Velib!');
-                }
-            });
-        }
-    },
-
+    /**
+     * request the contract options
+     */
     requestContracts: function() {
         var parameters;
         var that = this;
@@ -374,6 +334,76 @@ var velibDataRequest = Stapes.subclass({
         }
     },
 
+    /**
+     * request the geocoded position from the location input using the Google geocoding API
+     */
+    geocode: function () {
+        var that = this;
+
+        var geocoder = new google.maps.Geocoder();
+        var address = $('#search-location').val();
+        if(address.length > 0) {
+            geocoder.geocode({'address': address}, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    that.location = results[0].geometry.location;
+                    console.log("Position: lat: " + that.location.lat() + "lng: " + that.location.lat());
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+                that.$el.trigger('geocoded');
+            });
+        } else {
+            that.$el.trigger('geocoded');
+        }
+    },
+
+    /**
+     * construct query parameters for the requestStationList method
+     */
+    queryStationList: function() {
+        var parameters = {};
+        if($('#contract').val() != 'all') {
+            parameters.contract = $('#contract').val()
+        }
+        parameters.apiKey = this.apiKey;
+
+        return parameters;
+    },
+
+    /**
+     * request the station list
+     */
+    requestStationList: function () {
+        var parameters;
+        var that = this;
+
+        if(!this.ajaxStatus) {
+            this.ajaxStatus = true;
+            this.renderSpinner();
+
+            parameters = this.queryStationList();
+            $.ajax({
+                url: that.velibURL,
+                data: parameters,
+                success: function(data) {
+                    that.stations = data;
+                    that.$el.trigger('requested');
+                    that.ajaxStatus = false;
+                    that.removeSpinner();
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert('Erreur API JC Decaux Velib!');
+                }
+            });
+        }
+    },
+
+    /**
+     * request the current station
+     *
+     * @param id
+     * @param contract
+     */
     requestCurrentStation: function(id, contract) {
         var parameters;
         var currentStationURL;
@@ -403,7 +433,10 @@ var velibDataRequest = Stapes.subclass({
     },
 
     /**
-     * Conversion angle degré -> radian
+     *  Conversion angle degré -> radian
+     *
+     * @param v
+     * @returns {number}
      */
     toRadian: function(v) {
         return v * (Math.PI / 180);
@@ -411,6 +444,10 @@ var velibDataRequest = Stapes.subclass({
 
     /**
      * Calcul la différence entre deux angles en degré
+     *
+     * @param v1
+     * @param v2
+     * @returns {number}
      */
     diffRadian: function(v1, v2) {
         return this.toRadian(v2) - this.toRadian(v1);
@@ -418,13 +455,22 @@ var velibDataRequest = Stapes.subclass({
 
     /**
      * Calculate distance between two points with lat and lng coordinates
+     *
+     * @param lat1
+     * @param lng1
+     * @param lat2
+     * @param lng2
+     * @returns {number}
      */
     distance: function(lat1, lng1, lat2, lng2) {
         var earthRadiusInKilometers = 6367.0;
         return earthRadiusInKilometers * 2 * Math.asin( Math.min(1, Math.sqrt( ( Math.pow(Math.sin((this.diffRadian(lat1, lat2)) / 2.0), 2.0) + Math.cos(this.toRadian(lat1)) * Math.cos(this.toRadian(lat2)) * Math.pow(Math.sin((this.diffRadian(lng1, lng2)) / 2.0), 2.0) ) ) ) );
     },
 
-    sortByDistanceBikeAndStand: function() { // ajouter by distance et trigger view
+    /**
+     * sort station list by selected distance, available bike and free stand
+     */
+    sortByDistanceBikeAndStand: function() {
         var that = this;
 
         var distance = $('#distance').val();
@@ -457,9 +503,16 @@ var velibDataRequest = Stapes.subclass({
 
     },
 
+    /**
+     * trigger start spinner
+     */
     renderSpinner: function() {
         this.$el.trigger('startSpinner');
     },
+
+    /**
+     * trigger stop spinner
+     */
     removeSpinner: function() {
         this.$el.trigger('stopSpinner');
     }
