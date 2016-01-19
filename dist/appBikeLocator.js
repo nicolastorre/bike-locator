@@ -1,9 +1,13 @@
 this["templates"] = this["templates"] || {};
 
-this["templates"]["bikelocator"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
+this["templates"]["bikelocator"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<div id=\"search-box\" class=\"container\">\n    <div id=\"form-locator\" class=\"container well\">\n        <form>\n            <div class=\"form-group row\">\n                <div class=\"col-sm-2\">\n                    <label for=\"search-location\" class=\"form-control-label\">Location</label>\n                    <input type=\"text\" id=\"search-location\" name=\"location\" class=\"form-control\" >\n                </div>\n                <div class=\"col-sm-2\">\n                    <label for=\"distance\" class=\"form-control-label\">Distance</label>\n                    <select class=\"form-control\" id=\"distance\" name=\"distance\">\n                        <option value=\"none\">None</option>\n                        <option value=\"0.5\">0.5 km</option>\n                        <option value=\"1\">1 km</option>\n                        <option value=\"5\">5 km</option>\n                        <option value=\"10\">10 km</option>\n                        <option value=\"15\">15 km</option>\n                    </select>\n                </div>\n                <div class=\"col-sm-2\">\n                    <label for=\"contract\" class=\"form-control-label\">City</label>\n                    <select class=\"form-control\" id=\"contract\" name=\"contract\">\n                        <option value=\"all\" selected=\"selected\">All</option>\n                    </select>\n                </div>\n                <button type=\"button\" id=\"search-button\" class=\"col-sm-2 btn btn-primary\">Search</button>\n            </div>\n            <div class=\"form-group row\">\n                <div class=\"col-sm-2\">\n                    <label for=\"min-available-bike\" class=\"form-control-label\">Available bike</label>\n                </div>\n                <div class=\"col-sm-1 col-slider-value\">\n                    <input id=\"min-available-bike-value\" class=\"form-control slider-value\" readonly=\"readonly\"/>\n                </div>\n                <div class=\"col-sm-2\">\n                    <div id=\"min-available-bike\" class=\"slider\"></div>\n                </div>\n                <div class=\"col-sm-1 col-slider-value\">\n                    <input id=\"max-available-bike-value\" class=\"form-control slider-value\" readonly=\"readonly\"/>\n                </div>\n            </div>\n            <div class=\"form-group row\">\n                <div class=\"col-sm-2\">\n                    <label for=\"min-free-stand\" class=\"form-control-label\">Free stand</label>\n                </div>\n                <div class=\"col-sm-1 col-slider-value\">\n                    <input id=\"min-free-stand-value\" class=\"form-control slider-value\" readonly=\"readonly\"/>\n                </div>\n                <div class=\"col-sm-2\">\n                    <div id=\"min-free-stand\" class=\"slider\"></div>\n                </div>\n                <div class=\"col-sm-1 col-slider-value\">\n                    <input id=\"max-free-stand-value\" class=\"form-control slider-value\" readonly=\"readonly\"/>\n                </div>\n            </div>\n        </form>\n    </div>\n</div>\n<div class=\"container\">\n    <div class=\"row\">\n        <div id=\"list-velib\" class=\"col-sm-3\">\n        </div>\n        <div id=\"map-canvas\" class=\"col-sm-9\"></div>\n    </div>\n</div>";
+},"useData":true});
+
+this["templates"]["contractoptions"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     var alias1=container.lambda, alias2=container.escapeExpression;
 
-  return "                        <option value=\""
+  return "<option value=\""
     + alias2(alias1((depth0 != null ? depth0.name : depth0), depth0))
     + "\">"
     + alias2(alias1((depth0 != null ? depth0.name : depth0), depth0))
@@ -11,9 +15,7 @@ this["templates"]["bikelocator"] = Handlebars.template({"1":function(container,d
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return "<div id=\"search-box\" class=\"container\">\n    <div id=\"form-locator\" class=\"container well\">\n        <form>\n            <div class=\"form-group row\">\n                <div class=\"col-sm-2\">\n                    <label for=\"search-location\" class=\"form-control-label\">Location</label>\n                    <input type=\"text\" id=\"search-location\" name=\"location\" class=\"form-control\" >\n                </div>\n                <div class=\"col-sm-2\">\n                    <label for=\"distance\" class=\"form-control-label\">Distance</label>\n                    <select class=\"form-control\" id=\"distance\" name=\"distance\">\n                        <option value=\"none\">None</option>\n                        <option value=\"0.5\">0.5 km</option>\n                        <option value=\"1\">1 km</option>\n                        <option value=\"5\">5 km</option>\n                        <option value=\"10\">10 km</option>\n                        <option value=\"15\">15 km</option>\n                    </select>\n                </div>\n                <div class=\"col-sm-2\">\n                    <label for=\"contract\" class=\"form-control-label\">City</label>\n                    <select class=\"form-control\" id=\"contract\" name=\"contract\">\n                        <option value=\"all\" selected=\"selected\">All</option>\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.contracts : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\n                    </select>\n                </div>\n                <button type=\"button\" id=\"search-button\" class=\"col-sm-2 btn btn-primary\">Search</button>\n            </div>\n            <div class=\"form-group row\">\n                <div class=\"col-sm-2\">\n                    <label for=\"min-available-bike\" class=\"form-control-label\">Available bike</label>\n                </div>\n                <div class=\"col-sm-1 col-slider-value\">\n                    <input id=\"min-available-bike-value\" class=\"form-control slider-value\" readonly=\"readonly\"/>\n                </div>\n                <div class=\"col-sm-2\">\n                    <div id=\"min-available-bike\" class=\"slider\"></div>\n                </div>\n                <div class=\"col-sm-1 col-slider-value\">\n                    <input id=\"max-available-bike-value\" class=\"form-control slider-value\" readonly=\"readonly\"/>\n                </div>\n            </div>\n            <div class=\"form-group row\">\n                <div class=\"col-sm-2\">\n                    <label for=\"min-free-stand\" class=\"form-control-label\">Free stand</label>\n                </div>\n                <div class=\"col-sm-1 col-slider-value\">\n                    <input id=\"min-free-stand-value\" class=\"form-control slider-value\" readonly=\"readonly\"/>\n                </div>\n                <div class=\"col-sm-2\">\n                    <div id=\"min-free-stand\" class=\"slider\"></div>\n                </div>\n                <div class=\"col-sm-1 col-slider-value\">\n                    <input id=\"max-free-stand-value\" class=\"form-control slider-value\" readonly=\"readonly\"/>\n                </div>\n            </div>\n        </form>\n    </div>\n</div>\n<div class=\"container\">\n    <div class=\"row\">\n        <div id=\"list-velib\" class=\"col-sm-3\">\n        </div>\n        <div id=\"map-canvas\" class=\"col-sm-9\"></div>\n    </div>\n</div>";
+  return ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.contracts : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"useData":true});
 
 this["templates"]["emptyresult"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -82,6 +84,7 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
 
             // init the view
             this.view = new velibDataResult();
+            this.view.init();
 
             // init the spinner
             this.initSpinner();
@@ -177,7 +180,7 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
              * init contracts select view
              */
             this.$el.on("requestedContracts", function(){
-                that.view.initTemplate(that.model.contracts);
+                that.view.initContractOptions(that.model.contracts);
             });
 
             /**
@@ -483,10 +486,10 @@ var velibDataRequest = Stapes.subclass({
             $(element).append(out);
         },
 
-        initTemplate: function(contracts) {
+        init: function() {
             var that = this;
 
-            var context = {contracts: contracts};
+            var context = {};
             this.getTemplate('bikelocator',that.$el, context);
 
             var min = 0;
@@ -526,6 +529,12 @@ var velibDataRequest = Stapes.subclass({
 
             google.maps.event.addListener(autocomplete, 'place_changed', function() {});
 
+        },
+
+        initContractOptions: function(contracts) {
+            this.$contractOptions = $('#contract');
+            var context = {contracts: contracts};
+            this.getTemplate('contractoptions',this.$contractOptions, context);
         },
 
         mapView: function(stations) {

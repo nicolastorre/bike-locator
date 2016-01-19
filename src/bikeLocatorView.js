@@ -21,10 +21,10 @@
             $(element).append(out);
         },
 
-        initTemplate: function(contracts) {
+        init: function() {
             var that = this;
 
-            var context = {contracts: contracts};
+            var context = {};
             this.getTemplate('bikelocator',that.$el, context);
 
             var min = 0;
@@ -64,6 +64,12 @@
 
             google.maps.event.addListener(autocomplete, 'place_changed', function() {});
 
+        },
+
+        initContractOptions: function(contracts) {
+            this.$contractOptions = $('#contract');
+            var context = {contracts: contracts};
+            this.getTemplate('contractoptions',this.$contractOptions, context);
         },
 
         mapView: function(stations) {

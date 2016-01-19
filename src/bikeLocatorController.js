@@ -16,6 +16,7 @@
 
             // init the view
             this.view = new velibDataResult();
+            this.view.init();
 
             // init the spinner
             this.initSpinner();
@@ -111,7 +112,7 @@
              * init contracts select view
              */
             this.$el.on("requestedContracts", function(){
-                that.view.initTemplate(that.model.contracts);
+                that.view.initContractOptions(that.model.contracts);
             });
 
             /**

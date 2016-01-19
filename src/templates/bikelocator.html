@@ -21,10 +21,6 @@
                     <label for="contract" class="form-control-label">City</label>
                     <select class="form-control" id="contract" name="contract">
                         <option value="all" selected="selected">All</option>
-                        {{#each contracts}}
-                        <option value="{{this.name}}">{{this.name}}</option>
-                        {{/each}}
-
                     </select>
                 </div>
                 <button type="button" id="search-button" class="col-sm-2 btn btn-primary">Search</button>
