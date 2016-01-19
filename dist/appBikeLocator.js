@@ -67,21 +67,35 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
 },"useData":true});;;(function($) {
     'use strict';
 
+    /**
+     * main controller du widget bike locator
+     */
     var velibSearchController = Stapes.subclass({
         constructor: function () {
+
+            // main selector
             this.$el = $('#locator');
 
+            // init the model
             this.model = new velibDataRequest();
             this.model.requestContracts();
 
+            // init the view
             this.view = new velibDataResult();
 
+            // init the spinner
             this.initSpinner();
 
-            this.event();
+            // init the events
+            this.modelEvent();
+            this.viewEvent();
 
         },
 
+        /**
+         * waiting geocoding AND request of station list DONE
+         * execute sort of the data
+         */
         initDeferredSearch: function() {
             var that = this;1
 
@@ -93,28 +107,82 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
             });
         },
 
-        event: function (data) { // séparer event model et event view
+        /**
+         * model event
+         */
+        modelEvent: function () {
             var that = this;
 
-            that.$el.on("requestedContracts", function(){
-                that.view.initTemplate(that.model.contracts);
-            });
-
-            that.$el.on("click", '#search-button', function(){
+            /**
+             * click on search button
+             * execute geocoding and request of station list
+             */
+            that.$el.on("click", '#search-button', function () {
                 that.model.geocode();
                 that.model.request();
             });
 
+            /**
+             * waiting geocoding AND request of station list DONE
+             * execute sort of the data
+             */
             this.initDeferredSearch();
 
-            that.$el.on('geocoded', function(e) {
+            /**
+             * geocoding DONE
+             */
+            that.$el.on('geocoded', function (e) {
                 that.geocodingEvent.resolve();
             });
 
-            that.$el.on('requested', function(e) {
+            /**
+             * request of station list DONE
+             */
+            that.$el.on('requested', function (e) {
                 that.listStationsEvent.resolve();
             });
 
+            /**
+             * click on station
+             * execute request of the current clicked station
+             */
+            that.$el.on("click", '.station', function (e) {
+                var $target = $(e.target);
+                var id = $target.closest('.station').data('station');
+                var contract = $target.closest('.station').data('contract');
+                that.model.requestCurrentStation(id, contract);
+                google.maps.event.trigger(that.view.velibMarkers[id], 'clickDetail');
+
+            });
+
+            /**
+             * click on station marker map
+             * execute request of the current clicked station
+             */
+            that.$el.on("showDetail", function (e, id, contract) {
+                var $target = $(e.target);
+                that.model.requestCurrentStation(id, contract);
+
+            });
+
+        },
+
+        /**
+         * view event
+         */
+        viewEvent: function() {
+            var that = this;
+
+            /**
+             * init contracts select view
+             */
+            that.$el.on("requestedContracts", function(){
+                that.view.initTemplate(that.model.contracts);
+            });
+
+            /**
+             * show station list and map
+             */
             that.$el.on('showListMap', function(e) {
                 if(that.model.stations.length == 0) {
                     that.view.emptyResultView();
@@ -126,46 +194,48 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
 
             });
 
-            that.$el.on("click", '.station', function(e){
-                var $target = $(e.target);
-                var id = $target.closest('.station').data('station');
-                var contract = $target.closest('.station').data('contract');
-                that.model.requestCurrentStation(id,contract);
-                google.maps.event.trigger(that.view.velibMarkers[id], 'clickDetail');
-
-            });
-
-            that.$el.on("showDetail", function(e, id, contract){
-                var $target = $(e.target);
-                console.log(contract);
-                that.model.requestCurrentStation(id,contract);
-
-            });
-
+            /**
+             * show the current clicked station
+             */
             that.$el.on("requestedCurrentStation", function(){
                 that.view.detailView(that.model.currentStation);
             });
 
+            /**
+             * close the current station details and infowindow after clicking on infowindow close button
+             */
             that.$el.on("click", '.btn-close', function(e){
                 that.view.closeInfoWindow();
                 that.view.closeDetailStation();
             });
 
+            /**
+             * close the current station details and infowindow after clicking on detail close button
+             */
             that.$el.on("listView", function(){
                 that.view.closeInfoWindow();
                 that.view.closeDetailStation();
             });
 
+            /**
+             * start the spinner
+             */
             that.$el.on("startSpinner", function() {
                 that.spinner.spin(document.getElementById('locator'));
             });
 
+            /**
+             * stop the spinner
+             */
             that.$el.on("stopSpinner", function() {
                 that.spinner.stop();
             });
 
         },
 
+        /**
+         * initialisation du spinner
+         */
         initSpinner: function() {
             var opts = {
                 lines: 9 // The number of lines to draw
