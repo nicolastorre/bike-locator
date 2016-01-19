@@ -46,13 +46,11 @@ module.exports = function(grunt) {
 
         watch: {
             scripts: {
-                src: [
-                    'src/*.js'
+                files: [
+                    'src/*.js',
+                    'src/templates/*.html'
                 ],
-                tasks: ['concat', 'uglify'],
-                options: {
-                    spawn: false
-                }
+                tasks: ['handlebars','concat']
             }
         }
     });
@@ -63,6 +61,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('default', ['handlebars','concat','uglify']);
-    // grunt.registerTask('dev', ['watch']);
+    grunt.registerTask('dev', ['watch']);
 
 };
