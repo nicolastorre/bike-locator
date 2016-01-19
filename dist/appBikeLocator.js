@@ -13,7 +13,7 @@ this["templates"]["bikelocator"] = Handlebars.template({"1":function(container,d
 
   return "<div id=\"search-box\" class=\"container\">\n    <div id=\"form-locator\" class=\"container well\">\n        <form>\n            <div class=\"form-group row\">\n                <div class=\"col-sm-2\">\n                    <label for=\"search-location\" class=\"form-control-label\">Location</label>\n                    <input type=\"text\" id=\"search-location\" name=\"location\" class=\"form-control\" >\n                </div>\n                <div class=\"col-sm-2\">\n                    <label for=\"distance\" class=\"form-control-label\">Distance</label>\n                    <select class=\"form-control\" id=\"distance\" name=\"distance\">\n                        <option value=\"none\">None</option>\n                        <option value=\"0.5\">500 m</option>\n                        <option value=\"1\">1 km</option>\n                        <option value=\"5\">5 km</option>\n                        <option value=\"10\">10 km</option>\n                        <option value=\"15\">15 km</option>\n                    </select>\n                </div>\n                <div class=\"col-sm-2\">\n                    <label for=\"contract\" class=\"form-control-label\">City</label>\n                    <select class=\"form-control\" id=\"contract\" name=\"contract\">\n                        <option value=\"all\" selected=\"selected\">All</option>\n"
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.contracts : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\n                    </select>\n                </div>\n                <button type=\"button\" id=\"search-button\" class=\"col-sm-2 btn btn-primary\">Search</button>\n            </div>\n            <div class=\"form-group row\">\n                <div class=\"col-sm-2\">\n                    <label for=\"min-available-bike\" class=\"form-control-label\">Min available bike</label>\n                </div>\n                <div class=\"col-sm-2\">\n                    <div id=\"min-available-bike\" class=\"slider\"></div>\n                </div>\n                <div class=\"col-sm-2\">\n                    <input id=\"min-available-bike-value\" class=\"form-control slider-value\"/>\n                </div>\n            </div>\n            <div class=\"form-group row\">\n                <div class=\"col-sm-2\">\n                    <label for=\"min-free-stand\" class=\"form-control-label\">Min free stand</label>\n                </div>\n                <div class=\"col-sm-2\">\n                    <div id=\"min-free-stand\" class=\"slider\"></div>\n                </div>\n                <div class=\"col-sm-2\">\n                    <input id=\"min-free-stand-value\" class=\"form-control slider-value\"/>\n                </div>\n            </div>\n        </form>\n    </div>\n</div>\n<div class=\"container\">\n    <div class=\"row\">\n        <div id=\"list-velib\" class=\"col-sm-3\">\n        </div>\n        <div id=\"map-canvas\" class=\"col-sm-9\"></div>\n    </div>\n</div>";
+    + "\n                    </select>\n                </div>\n                <button type=\"button\" id=\"search-button\" class=\"col-sm-2 btn btn-primary\">Search</button>\n            </div>\n            <div class=\"form-group row\">\n                <div class=\"col-sm-2\">\n                    <label for=\"min-available-bike\" class=\"form-control-label\">Available bike</label>\n                </div>\n                <div class=\"col-sm-1 col-slider-value\">\n                    <input id=\"min-available-bike-value\" class=\"form-control slider-value\" readonly=\"readonly\"/>\n                </div>\n                <div class=\"col-sm-2\">\n                    <div id=\"min-available-bike\" class=\"slider\"></div>\n                </div>\n                <div class=\"col-sm-1 col-slider-value\">\n                    <input id=\"max-available-bike-value\" class=\"form-control slider-value\" readonly=\"readonly\"/>\n                </div>\n            </div>\n            <div class=\"form-group row\">\n                <div class=\"col-sm-2\">\n                    <label for=\"min-free-stand\" class=\"form-control-label\">Free stand</label>\n                </div>\n                <div class=\"col-sm-1 col-slider-value\">\n                    <input id=\"min-free-stand-value\" class=\"form-control slider-value\" readonly=\"readonly\"/>\n                </div>\n                <div class=\"col-sm-2\">\n                    <div id=\"min-free-stand\" class=\"slider\"></div>\n                </div>\n                <div class=\"col-sm-1 col-slider-value\">\n                    <input id=\"max-free-stand-value\" class=\"form-control slider-value\" readonly=\"readonly\"/>\n                </div>\n            </div>\n        </form>\n    </div>\n</div>\n<div class=\"container\">\n    <div class=\"row\">\n        <div id=\"list-velib\" class=\"col-sm-3\">\n        </div>\n        <div id=\"map-canvas\" class=\"col-sm-9\"></div>\n    </div>\n</div>";
 },"useData":true});
 
 this["templates"]["emptyresult"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -75,6 +75,8 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
             this.model.requestContracts();
 
             this.view = new velibDataResult();
+
+            this.initSpinner();
 
             this.event();
 
@@ -154,7 +156,42 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
                 that.view.closeDetailStation();
             });
 
-        }
+            that.$el.on("startSpinner", function() {
+                that.spinner.spin(document.getElementById('locator'));
+            });
+
+            that.$el.on("stopSpinner", function() {
+                that.spinner.stop();
+            });
+
+        },
+
+        initSpinner: function() {
+            var opts = {
+                lines: 9 // The number of lines to draw
+                , length: 20 // The length of each line
+                , width: 8 // The line thickness
+                , radius: 20 // The radius of the inner circle
+                , scale: 1 // Scales overall size of the spinner
+                , corners: 1 // Corner roundness (0..1)
+                , color: '#000' // #rgb or #rrggbb or array of colors
+                , opacity: 0.25 // Opacity of the lines
+                , rotate: 0 // The rotation offset
+                , direction: 1 // 1: clockwise, -1: counterclockwise
+                , speed: 1 // Rounds per second
+                , trail: 60 // Afterglow percentage
+                , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+                , zIndex: 2e9 // The z-index (defaults to 2000000000)
+                , className: 'spinner' // The CSS class to assign to the spinner
+                , top: '50%' // Top position relative to parent
+                , left: '50%' // Left position relative to parent
+                , shadow: false // Whether to render a shadow
+                , hwaccel: false // Whether to use hardware acceleration
+                , position: 'absolute' // Element positioning
+            }
+
+            this.spinner = new Spinner(opts);
+        },
 
     });;
 var velibDataRequest = Stapes.subclass({
@@ -271,7 +308,6 @@ var velibDataRequest = Stapes.subclass({
 
         if(!this.ajaxStatus) {
             this.ajaxStatus = true;
-            this.renderSpinner();
 
             currentStationURL = that.stationURL + id;
             parameters = {
@@ -285,7 +321,6 @@ var velibDataRequest = Stapes.subclass({
                     that.currentStation = data;
                     that.$el.trigger('requestedCurrentStation');
                     that.ajaxStatus = false;
-                    that.removeSpinner();
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     alert('Erreur API JC Decaux Velib!');
@@ -320,12 +355,16 @@ var velibDataRequest = Stapes.subclass({
         var that = this;
 
         var distance = $('#distance').val();
-        var min_available_bike = $('#min-available-bike').slider("value");
-        var min_free_stand = $('#min-free-stand').slider("value");
+        var min_available_bike = $('#min-available-bike').slider("values", 0);
+        var max_available_bike = $('#min-available-bike').slider("values", 1);
+        var min_free_stand = $('#min-free-stand').slider("values", 0);
+        var max_free_stand = $('#min-free-stand').slider("values", 1);
         var new_stations = [];
         if("none" != distance && null != that.location) {
             $.each(that.stations, function (index, value) {
-                if (that.distance(value.position.lat, value.position.lng, that.location.lat(), that.location.lng()) <= distance && value.available_bikes >= min_available_bike && value.available_bike_stands >= min_free_stand) {
+                if (that.distance(value.position.lat, value.position.lng, that.location.lat(), that.location.lng()) <= distance
+                    && value.available_bikes >= min_available_bike && value.available_bike_stands >= min_free_stand
+                    && value.available_bikes <= max_available_bike && value.available_bike_stands <= max_free_stand) {
                     new_stations.push(that.stations[index]);
                 }
 
@@ -346,10 +385,10 @@ var velibDataRequest = Stapes.subclass({
     },
 
     renderSpinner: function() {
-        this.$el.toggleClass('loading');
+        this.$el.trigger('startSpinner');
     },
     removeSpinner: function() {
-        this.$el.removeClass('loading');
+        this.$el.trigger('stopSpinner');
     }
 });;
     var velibDataResult = Stapes.subclass({
@@ -380,27 +419,37 @@ var velibDataRequest = Stapes.subclass({
             var context = {contracts: contracts};
             this.getTemplate('bikelocator',that.$el, context);
 
+            var min = 0;
+            var max = 100;
             $('#min-available-bike').slider(
             {
-                value: 0,
-                min: 0,
-                max: 50,
-                step: 5,
+                range: true,
+                values: [min, max],
+                min: min,
+                max: max,
+                step: 1,
                 slide: function( e, ui ) {
-                    $('#min-available-bike-value').val(ui.value);
+                    $('#min-available-bike-value').val(ui.values[0]);
+                    $('#max-available-bike-value').val(ui.values[1]);
                 }
             });
+            $('#min-available-bike-value').val(min);
+            $('#max-available-bike-value').val(max);
 
             $('#min-free-stand').slider(
             {
-                value: 0,
-                min: 0,
-                max: 50,
-                step: 5,
+                range: true,
+                values: [min, max],
+                min: min,
+                max: max,
+                step: 1,
                 slide: function( e, ui ) {
-                    $('#min-free-stand-value').val(ui.value);
+                    $('#min-free-stand-value').val(ui.values[0]);
+                    $('#max-free-stand-value').val(ui.values[1]);
                 }
             });
+            $('#min-free-stand-value').val(min);
+            $('#max-free-stand-value').val(max);
 
             var autocomplete = new google.maps.places.Autocomplete(
                 (document.getElementById('search-location')), {types: ['geocode']});
@@ -528,10 +577,10 @@ var velibDataRequest = Stapes.subclass({
         },
 
         renderSpinner: function() {
-            this.$el.toggleClass('loading');
+            this.$el.trigger('startSpinner');
         },
         removeSpinner: function() {
-            this.$el.removeClass('loading');
+            this.$el.trigger('stopSpinner');
         }
     });;
 $( document ).ready(function() {

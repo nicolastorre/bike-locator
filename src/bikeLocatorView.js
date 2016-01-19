@@ -27,27 +27,37 @@
             var context = {contracts: contracts};
             this.getTemplate('bikelocator',that.$el, context);
 
+            var min = 0;
+            var max = 100;
             $('#min-available-bike').slider(
             {
-                value: 0,
-                min: 0,
-                max: 50,
-                step: 5,
+                range: true,
+                values: [min, max],
+                min: min,
+                max: max,
+                step: 1,
                 slide: function( e, ui ) {
-                    $('#min-available-bike-value').val(ui.value);
+                    $('#min-available-bike-value').val(ui.values[0]);
+                    $('#max-available-bike-value').val(ui.values[1]);
                 }
             });
+            $('#min-available-bike-value').val(min);
+            $('#max-available-bike-value').val(max);
 
             $('#min-free-stand').slider(
             {
-                value: 0,
-                min: 0,
-                max: 50,
-                step: 5,
+                range: true,
+                values: [min, max],
+                min: min,
+                max: max,
+                step: 1,
                 slide: function( e, ui ) {
-                    $('#min-free-stand-value').val(ui.value);
+                    $('#min-free-stand-value').val(ui.values[0]);
+                    $('#max-free-stand-value').val(ui.values[1]);
                 }
             });
+            $('#min-free-stand-value').val(min);
+            $('#max-free-stand-value').val(max);
 
             var autocomplete = new google.maps.places.Autocomplete(
                 (document.getElementById('search-location')), {types: ['geocode']});
@@ -175,9 +185,9 @@
         },
 
         renderSpinner: function() {
-            this.$el.toggleClass('loading');
+            this.$el.trigger('startSpinner');
         },
         removeSpinner: function() {
-            this.$el.removeClass('loading');
+            this.$el.trigger('stopSpinner');
         }
     });

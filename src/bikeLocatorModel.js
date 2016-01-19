@@ -113,7 +113,6 @@ var velibDataRequest = Stapes.subclass({
 
         if(!this.ajaxStatus) {
             this.ajaxStatus = true;
-            this.renderSpinner();
 
             currentStationURL = that.stationURL + id;
             parameters = {
@@ -127,7 +126,6 @@ var velibDataRequest = Stapes.subclass({
                     that.currentStation = data;
                     that.$el.trigger('requestedCurrentStation');
                     that.ajaxStatus = false;
-                    that.removeSpinner();
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
                     alert('Erreur API JC Decaux Velib!');
@@ -162,12 +160,16 @@ var velibDataRequest = Stapes.subclass({
         var that = this;
 
         var distance = $('#distance').val();
-        var min_available_bike = $('#min-available-bike').slider("value");
-        var min_free_stand = $('#min-free-stand').slider("value");
+        var min_available_bike = $('#min-available-bike').slider("values", 0);
+        var max_available_bike = $('#min-available-bike').slider("values", 1);
+        var min_free_stand = $('#min-free-stand').slider("values", 0);
+        var max_free_stand = $('#min-free-stand').slider("values", 1);
         var new_stations = [];
         if("none" != distance && null != that.location) {
             $.each(that.stations, function (index, value) {
-                if (that.distance(value.position.lat, value.position.lng, that.location.lat(), that.location.lng()) <= distance && value.available_bikes >= min_available_bike && value.available_bike_stands >= min_free_stand) {
+                if (that.distance(value.position.lat, value.position.lng, that.location.lat(), that.location.lng()) <= distance
+                    && value.available_bikes >= min_available_bike && value.available_bike_stands >= min_free_stand
+                    && value.available_bikes <= max_available_bike && value.available_bike_stands <= max_free_stand) {
                     new_stations.push(that.stations[index]);
                 }
 
@@ -188,9 +190,9 @@ var velibDataRequest = Stapes.subclass({
     },
 
     renderSpinner: function() {
-        this.$el.toggleClass('loading');
+        this.$el.trigger('startSpinner');
     },
     removeSpinner: function() {
-        this.$el.removeClass('loading');
+        this.$el.trigger('stopSpinner');
     }
 });
