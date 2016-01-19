@@ -275,7 +275,7 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
             // main selector
             this.$el = $('#locator');
 
-            // JC Decaux API KEY
+            // API KEY
             this.apiKey = "15c9f9a03c7c9a67d4287fd82e04bf6d775719ad";
 
             // API URL
