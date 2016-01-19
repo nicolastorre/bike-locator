@@ -141,7 +141,7 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
             /**
              * request of station list DONE
              */
-            this.$el.on('requested', function (e) {
+            this.$el.on('requestedStationList', function (e) {
                 that.listStationsEvent.resolve();
             });
 
@@ -279,7 +279,6 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
             this.apiKey = "15c9f9a03c7c9a67d4287fd82e04bf6d775719ad";
 
             // API URL
-            this.velibURL = "https://api.jcdecaux.com/vls/v1/stations";
             this.contractURL = "https://api.jcdecaux.com/vls/v1/contracts";
             this.stationURL = "https://api.jcdecaux.com/vls/v1/stations/";
 
@@ -383,11 +382,11 @@ this["templates"]["stationlist"] = Handlebars.template({"1":function(container,d
 
                 parameters = this.queryStationList();
                 $.ajax({
-                    url: that.velibURL,
+                    url: that.stationURL,
                     data: parameters,
                     success: function(data) {
                         that.stations = data;
-                        that.$el.trigger('requested');
+                        that.$el.trigger('requestedStationList');
                         that.ajaxStatus = false;
                         that.removeSpinner();
                     },

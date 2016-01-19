@@ -73,7 +73,7 @@
             /**
              * request of station list DONE
              */
-            this.$el.on('requested', function (e) {
+            this.$el.on('requestedStationList', function (e) {
                 that.listStationsEvent.resolve();
             });
 
